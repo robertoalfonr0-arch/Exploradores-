@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explora lo Extraordinario · Curiosidades del Universo, la Historia y la Humanidad</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap');
+
+    :root {
+      --bg-deep: #0a0e1a;
+      --bg-card: rgba(18, 24, 40, 0.85);
+      --accent: #7c9cff;
+      --accent-soft: #a8c0ff;
+      --gold: #f0c674;
+      --rare: #c792ea;
+      --epic: #ff9e64;
+      --text: #e8ecf4;
+      --text-muted: #9aa3b5;
+      --glow: 0 0 40px rgba(124, 156, 255, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Starfield background */
+    .stars {
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(1.5px 1.5px at 20px 30px, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 230px 80px, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 300px 150px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 380px 50px, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 450px 180px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 520px 90px, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 600px 200px, rgba(255,255,255,0.5), transparent);
+      background-size: 650px 250px;
+      animation: drift 120s linear infinite;
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes drift {
+      from { transform: translateY(0); }
+      to { transform: translateY(-250px); }
+    }
+
+    .nebula {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .nebula-1 {
+      background: #4a6cf7;
+      top: -150px;
+      left: -100px;
+    }
+
+    .nebula-2 {
+      background: #c792ea;
+      bottom: -200px;
+      right: -150px;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--accent-soft), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.35rem;
+    }
+
+    .tagline {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 300;
+    }
+
+    /* Interest bar */
+    .interest-panel {
+      background: var(--bg-card);
+      border: 1px solid rgba(124, 156, 255, 0.2);
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--glow);
+      animation: fadeIn 1s ease 0.2s both;
+    }
+
+    .interest-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .interest-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .interest-level {
+      font-weight: 600;
+      color: var(--accent-soft);
+      font-size: 0.95rem;
+    }
+
+    .progress-track {
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--rare));
+      border-radius: 99px;
+      transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      width: 0%;
+    }
+
+    .interest-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.55rem;
+      text-align: center;
+    }
+
+    /* Main card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(124, 156, 255, 0.25);
+      border-radius: 24px;
+      padding: 2.25rem 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--glow);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 280px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 1s ease 0.35s both;
+      transition: border-color 0.4s, box-shadow 0.4s;
+    }
+
+    .card.rare {
+      border-color: rgba(199, 146, 234, 0.5);
+      box-shadow: 0 0 50px rgba(199, 146, 234, 0.2);
+    }
+
+    .card.epic {
+      border-color: rgba(255, 158, 100, 0.55);
+      box-shadow: 0 0 55px rgba(255, 158, 100, 0.25);
+    }
+
+    .card-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-soft);
+      margin-bottom: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .rarity-badge {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 99px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-left: 0.5rem;
+    }
+
+    .rarity-common { background: rgba(124,156,255,0.2); color: var(--accent-soft); }
+    .rarity-rare { background: rgba(199,146,234,0.25); color: var(--rare); }
+    .rarity-epic { background: rgba(255,158,100,0.25); color: var(--epic); }
+
+    .card-content {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      line-height: 1.55;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      transition: opacity 0.25s;
+    }
+
+    .card-content.fade {
+      opacity: 0;
+    }
+
+    .card-source {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: auto;
+    }
+
+    /* Buttons */
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+      animation: fadeIn 1s ease 0.5s both;
+    }
+
+    @media (min-width: 540px) {
+      .actions {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .btn {
+      background: rgba(124, 156, 255, 0.12);
+      border: 1px solid rgba(124, 156, 255, 0.3);
+      color: var(--text);
+      padding: 0.9rem 0.75rem;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background: rgba(124, 156, 255, 0.22);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 156, 255, 0.15);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-icon {
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .btn-label {
+      font-size: 0.78rem;
+      opacity: 0.9;
+    }
+
+    .btn-motivate {
+      background: rgba(240, 198, 116, 0.12);
+      border-color: rgba(240, 198, 116, 0.35);
+    }
+
+    .btn-motivate:hover {
+      background: rgba(240, 198, 116, 0.22);
+      border-color: var(--gold);
+      box-shadow: 0 8px 20px rgba(240, 198, 116, 0.15);
+    }
+
+    /* Welcome overlay */
+    .welcome {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-deep);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      transition: opacity 0.7s ease, visibility 0.7s;
+    }
+
+    .welcome.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .welcome h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--accent-soft), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 420px;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+
+    .welcome-btn {
+      background: linear-gradient(135deg, var(--accent), #5a7dff);
+      border: none;
+      color: white;
+      padding: 1rem 2.25rem;
+      border-radius: 99px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 30px rgba(124, 156, 255, 0.35);
+    }
+
+    .welcome-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 12px 36px rgba(124, 156, 255, 0.45);
+    }
+
+    .encouragement {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      min-height: 1.4em;
+      animation: fadeIn 1s ease 0.6s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+
+  <!-- Welcome screen -->
+  <div class="welcome" id="welcome">
+    <h1>Bienvenido, explorador</h1>
+    <p>Aquí la curiosidad es tu brújula. Cada clic desvela algo más asombroso sobre la humanidad, la historia y el universo. Cuanto más te interesa, más raro se vuelve lo que descubres.</p>
+    <button class="welcome-btn" id="startBtn">Comenzar la exploración</button>
+  </div>
+
+  <div class="container">
+    <header>
+      <div class="logo">Explora lo Extraordinario</div>
+      <div class="tagline">Datos curiosos · Historia · Universo · Conquistadores</div>
+    </header>
+
+    <div class="interest-panel">
+      <div class="interest-header">
+        <span class="interest-label">Nivel de interés</span>
+        <span class="interest-level" id="levelText">Nivel 1 · Curioso</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="interest-hint" id="interestHint">Sigue explorando para desbloquear datos más raros</div>
+    </div>
+
+    <div class="card" id="mainCard">
+      <div class="card-category" id="category">
+        Motivación
+        <span class="rarity-badge rarity-common" id="rarityBadge">Común</span>
+      </div>
+      <div class="card-content" id="content">
+        “El aburrimiento se cura con curiosidad. La curiosidad no se cura con nada.”
+      </div>
+      <div class="card-source" id="source">— Dorothy Parker</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-motivate" onclick="showContent('motivacion')">
+        <span class="btn-icon">✨</span>
+        <span class="btn-label">Motivación</span>
+      </button>
+      <button class="btn" onclick="showContent('universo')">
+        <span class="btn-icon">🌌</span>
+        <span class="btn-label">Universo</span>
+      </button>
+      <button class="btn" onclick="showContent('historia')">
+        <span class="btn-icon">📜</span>
+        <span class="btn-label">Historia</span>
+      </button>
+      <button class="btn" onclick="showContent('conquistadores')">
+        <span class="btn-icon">⚔️</span>
+        <span class="btn-label">Conquistadores</span>
+      </button>
+    </div>
+
+    <div class="encouragement" id="encouragement"></div>
+
+    <footer>
+      Hecho para mentes curiosas · Cada exploración cuenta
+    </footer>
+  </div>
+
+  <script>
+    // ========== DATA ==========
+    const data = {
+      motivacion: [
+        { text: "“El aburrimiento se cura con curiosidad. La curiosidad no se cura con nada.”", source: "Dorothy Parker", rarity: 1 },
+        { text: "“No tengo talentos especiales, pero sí soy profundamente curioso.”", source: "Albert Einstein", rarity: 1 },
+        { text: "“La curiosidad es más importante que el conocimiento.”", source: "Albert Einstein", rarity: 1 },
+        { text: "“Prefiero que mi mente se abra movida por la curiosidad a que se cierre movida por la convicción.”", source: "Gerry Spence", rarity: 1 },
+        { text: "“La curiosidad vence al miedo más fácilmente que el valor.”", source: "Anónimo", rarity: 1 },
+        { text: "“Es un milagro que la curiosidad sobreviva a la educación reglada.”", source: "Albert Einstein", rarity: 2 },
+        { text: "“No dejaremos de explorar, y al final de nuestra búsqueda llegaremos a donde empezamos y conoceremos por primera vez el lugar.”", source: "T. S. Eliot", rarity: 2 },
+        { text: "“Ser curioso. Leer ampliamente. Probar cosas nuevas. Lo que la gente llama inteligencia simplemente se reduce a curiosidad.”", source: "Anónimo", rarity: 2 },
+        { text: "“La curiosidad es la chispa que enciende el fuego del aprendizaje.”", source: "William Arthur Ward", rarity: 2 },
+        { text: "“Vive con curiosidad, asombro y fascinación.”", source: "Salvador Dalí", rarity: 3 }
+      ],
+      universo: [
+        { text: "Todo lo que observamos en el espacio ya ha sucedido: la luz tarda tiempo en llegar hasta nosotros. Cuando miras el Sol, lo ves como era hace 8 minutos.", source: "Relatividad · NASA", rarity: 1 },
+        { text: "Un día en Venus dura más que un año en Venus: tarda 243 días terrestres en girar sobre sí mismo y solo 225 en orbitar el Sol.", source: "Sistema Solar", rarity: 1 },
+        { text: "Hay más árboles en la Tierra (más de 3 billones) que estrellas en la Vía Láctea (entre 100 y 400 mil millones).", source: "Yale / NASA", rarity: 1 },
+        { text: "La materia visible (estrellas, planetas, gas) representa solo alrededor del 5% del universo. El resto es materia oscura y energía oscura.", source: "Cosmología", rarity: 1 },
+        { text: "El universo observable mide aproximadamente 93 mil millones de años luz de diámetro.", source: "Astronomía", rarity: 1 },
+        { text: "Existe un exoplaneta (55 Cancri e) que podría estar compuesto en gran parte por diamantes debido a su abundancia de carbono y la extrema presión.", source: "American Astronomical Society", rarity: 2 },
+        { text: "La estrella HD 140283, conocida como Matusalén, tiene una edad estimada de unos 14.500 millones de años… más antigua que el universo según algunas estimaciones (13.800 millones).", source: "Hubble / NASA", rarity: 2 },
+        { text: "Se ha detectado una enorme nube de vapor de agua a 12 mil millones de años luz que contiene billones de veces más agua que todos los océanos de la Tierra.", source: "NASA 2011", rarity: 2 },
+        { text: "Mercurio tiene una ‘cola’ de átomos de sodio empujados por el viento solar, similar a la de un cometa.", source: "Observaciones recientes", rarity: 2 },
+        { text: "El lugar más frío conocido del universo es la nebulosa Boomerang, con una temperatura de aproximadamente 1 kelvin (−272 °C).", source: "Astronomía", rarity: 3 },
+        { text: "Hay más estrellas en el universo observable que granos de arena en todas las playas de la Tierra (estimaciones de 10⁴⁸ a 10⁵⁰ estrellas).", source: "Cálculos astronómicos", rarity: 3 },
+        { text: "En unos 4.000 millones de años, la Vía Láctea y Andrómeda se fusionarán formando una galaxia elíptica gigante. Las estrellas casi nunca chocarán entre sí.", source: "Predicciones cosmológicas", rarity: 3 }
+      ],
+      historia: [
+        { text: "Cleopatra vivió más cerca en el tiempo del alunizaje de 1969 que de la construcción de la Gran Pirámide de Guiza.", source: "Cronología egipcia", rarity: 1 },
+        { text: "El cerebro humano no siente dolor: no tiene receptores nociceptivos. El dolor de cabeza proviene de vasos, membranas y músculos circundantes.", source: "Neurociencia", rarity: 1 },
+        { text: "El Monte Everest sigue creciendo unos 4 milímetros al año debido al choque de las placas tectónicas.", source: "Geología", rarity: 1 },
+        { text: "En Etiopía el calendario oficial va con 7 u 8 años de retraso respecto al gregoriano que usamos la mayoría.", source: "Historia cultural", rarity: 1 },
+        { text: "Las cebras tienen la piel negra; las rayas blancas son una adaptación del pelaje.", source: "Biología", rarity: 1 },
+        { text: "Nieva ocasionalmente en el desierto del Sahara: se registraron nevadas en 1979 y 2018.", source: "Climatología", rarity: 2 },
+        { text: "Los canguros no pueden caminar hacia atrás debido a la estructura de sus patas y cola.", source: "Anatomía animal", rarity: 2 },
+        { text: "El corazón de una ballena azul puede pesar cerca de 600 kg y es comparable en tamaño a un automóvil pequeño.", source: "Biología marina", rarity: 2 },
+        { text: "El Desierto de Atacama es uno de los lugares más secos de la Tierra: hay zonas donde no ha llovido en más de 400 años.", source: "Geografía", rarity: 2 },
+        { text: "La primera fotografía astronómica de la Luna fue tomada en 1840 por William Draper.", source: "Historia de la astronomía", rarity: 3 },
+        { text: "El registro más antiguo de un eclipse anular de Sol se realizó en Irlanda alrededor del año 3340 a.C.", source: "Arqueoastronomía", rarity: 3 }
+      ],
+      conquistadores: [
+        { text: "“No hay nada imposible para aquella persona que lo intenta.”", source: "Alejandro Magno", rarity: 1 },
+        { text: "“No tengo miedo de un ejército de leones dirigido por una oveja. Tengo miedo de un ejército de ovejas dirigido por un león.”", source: "Alejandro Magno", rarity: 1 },
+        { text: "“Estoy en deuda con mi padre por vivir, pero con mi maestro por vivir bien.”", source: "Alejandro Magno", rarity: 1 },
+        { text: "“Una flecha sola puede romperse fácilmente, pero muchas flechas juntas son indestructibles.”", source: "Gengis Kan", rarity: 1 },
+        { text: "“Ten una sola mente y una sola fe, entonces podrás conquistar a tus enemigos y vivir una vida larga y feliz.”", source: "Gengis Kan", rarity: 1 },
+        { text: "“Conquistar el mundo montado a caballo es fácil; es desmontar y gobernar lo que es difícil.”", source: "Gengis Kan", rarity: 2 },
+        { text: "“Preferiría vivir una vida corta y llena de gloria que una larga sumida en la oscuridad.”", source: "Alejandro Magno", rarity: 2 },
+        { text: "“La victoria pertenece al más perseverante.”", source: "Gengis Kan (atribuida)", rarity: 2 },
+        { text: "“Recuerda que de la conducta de cada uno depende el destino de todos.”", source: "Alejandro Magno", rarity: 2 },
+        { text: "“Te dejo el imperio más grande del mundo, pero su preservación depende de que permanezcáis siempre unidos.”", source: "Gengis Kan", rarity: 3 },
+        { text: "“Hay tantos mundos y aún no he conquistado ni siquiera uno.”", source: "Alejandro Magno (atribuida)", rarity: 3 },
+        { text: "“Un líder verdadero no solo crea seguidores, sino que también forja líderes.”", source: "Gengis Kan (atribuida)", rarity: 3 }
+      ]
+    };
+
+    const levels = [
+      { min: 0, name: "Curioso", hint: "Sigue explorando para desbloquear datos más raros" },
+      { min: 5, name: "Interesado", hint: "¡Bien! Empiezas a desbloquear rarezas" },
+      { min: 12, name: "Intrigado", hint: "Los datos raros ya aparecen con más frecuencia" },
+      { min: 20, name: "Fascinado", hint: "Ahora dominan las rarezas y aparecen épicos" },
+      { min: 30, name: "Explorador legendario", hint: "Has alcanzado el máximo interés · ¡Todo está disponible!" }
+    ];
+
+    const encouragements = [
+      "¡Cada clic te acerca a lo extraordinario!",
+      "Tu curiosidad está abriendo puertas nuevas.",
+      "Sigue así, el universo guarda secretos para ti.",
+      "Los grandes descubrimientos empiezan con una pregunta.",
+      "¡Qué bien que sigas explorando!",
+      "La historia y el cosmos te están hablando.",
+      "Un explorador de verdad nunca se detiene.",
+      "Tu interés hace que lo raro se vuelva visible."
+    ];
+
+    // ========== STATE ==========
+    let interest = 0;
+    let currentCategory = "motivacion";
+    let lastIndex = { motivacion: -1, universo: -1, historia: -1, conquistadores: -1 };
+
+    // ========== FUNCTIONS ==========
+    function getCurrentLevel() {
+      let lvl = levels[0];
+      for (const l of levels) {
+        if (interest >= l.min) lvl = l;
+      }
+      return lvl;
+    }
+
+    function getMaxRarity() {
+      if (interest >= 30) return 3;
+      if (interest >= 20) return 3;
+      if (interest >= 12) return 2;
+      if (interest >= 5) return 2;
+      return 1;
+    }
+
+    function updateUI() {
+      const level = getCurrentLevel();
+      const maxProgress = 30;
+      const pct = Math.min(100, (interest / maxProgress) * 100);
+
+      document.getElementById("levelText").textContent = `Nivel ${levels.indexOf(level) + 1} · ${level.name}`;
+      document.getElementById("progressFill").style.width = pct + "%";
+      document.getElementById("interestHint").textContent = level.hint;
+
+      const card = document.getElementById("mainCard");
+      card.classList.remove("rare", "epic");
+    }
+
+    function pickItem(category) {
+      const maxR = getMaxRarity();
+      let pool = data[category].filter(item => item.rarity <= maxR);
+
+      // Bias toward higher rarity as interest grows
+      if (interest >= 12) {
+        const high = pool.filter(i => i.rarity >= 2);
+        if (high.length && Math.random() < 0.55) pool = high;
+      }
+      if (interest >= 20) {
+        const epic = pool.filter(i => i.rarity === 3);
+        if (epic.length && Math.random() < 0.4) pool = epic;
+      }
+
+      // Avoid immediate repeat
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * pool.length);
+      } while (pool.length > 1 && idx === lastIndex[category]);
+
+      lastIndex[category] = idx;
+      return pool[idx];
+    }
+
+    function showContent(category) {
+      currentCategory = category;
+      interest++;
+      updateUI();
+
+      const item = pickItem(category);
+      const contentEl = document.getElementById("content");
+      const sourceEl = document.getElementById("source");
+      const categoryEl = document.getElementById("category");
+      const badgeEl = document.getElementById("rarityBadge");
+      const card = document.getElementById("mainCard");
+
+      contentEl.classList.add("fade");
+
+      setTimeout(() => {
+        contentEl.textContent = item.text;
+        sourceEl.textContent = "— " + item.source;
+
+        const catNames = {
+          motivacion: "Motivación",
+          universo: "Universo",
+          historia: "Historia & Humanidad",
+          conquistadores: "Conquistadores"
+        };
+        categoryEl.innerHTML = catNames[category] + ' <span class="rarity-badge" id="rarityBadge"></span>';
+
+        const badge = document.getElementById("rarityBadge");
+        if (item.rarity === 1) {
+          badge.textContent = "Común";
+          badge.className = "rarity-badge rarity-common";
+          card.classList.remove("rare", "epic");
+        } else if (item.rarity === 2) {
+          badge.textContent = "Raro";
+          badge.className = "rarity-badge rarity-rare";
+          card.classList.add("rare");
+          card.classList.remove("epic");
+        } else {
+          badge.textContent = "Épico";
+          badge.className = "rarity-badge rarity-epic";
+          card.classList.add("epic");
+          card.classList.remove("rare");
+        }
+
+        contentEl.classList.remove("fade");
+      }, 220);
+
+      // Encouragement
+      const enc = encouragements[Math.floor(Math.random() * encouragements.length)];
+      document.getElementById("encouragement").textContent = enc;
+    }
+
+    // Start
+    document.getElementById("startBtn").addEventListener("click", () => {
+      document.getElementById("welcome").classList.add("hidden");
+      showContent("motivacion");
+    });
+
+    // Initial UI
+    updateUI();
+  </script>
+</body>
+</html>
